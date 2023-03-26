@@ -61,7 +61,7 @@ class additive_scalar_aggregator(nn.Module):
             out = F.sigmoid(combined)
         else:
             # out =  F.log_softmax(combined, dim = 1)
-            out = F.log_softmax(self.linear(H.view(-1,self.nconcepts)))
+            out = F.log_softmax(self.linear((F.relu(H)).view(-1,self.nconcepts)))
         # print (out.shape)
         return out
 

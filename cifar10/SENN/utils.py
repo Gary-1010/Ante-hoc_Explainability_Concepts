@@ -612,10 +612,10 @@ def concept_grid(model, data_loader, cuda=False, top_k = 6, layout = 'vertical',
     num_concepts = model.conceptizer.nconcept
     # concept_dim  = model.conceptizer.dout
 
-    for i in range(num_concepts):
-      path = 'test/cifar_{}'.format(i+1)
-      if not os.path.exists(path):
-          os.mkdir(path)
+    # for i in range(num_concepts):
+    #   path = 'test/cifar_{}'.format(i+1)
+    #   if not os.path.exists(path):
+    #       os.mkdir(path)
 
     top_activations = {k: np.array(top_k*[-1000.00]) for k in range(num_concepts)}
     top_examples = {k: top_k*[None] for k in range(num_concepts)}
@@ -691,7 +691,7 @@ def concept_grid(model, data_loader, cuda=False, top_k = 6, layout = 'vertical',
         # top_examples[i] = data_loader.data[top_idxs[i]]
         # top_examples[i] = data_loader.dataset[top_idxs[i]]
         for j in top_idxs[i]:
-            get_image,_ = data_loader.dataset[j]
+            get_image, _ = data_loader.dataset[int(j)]
             # print (get_image.shape)
             # print (get_image.min(), get_image.max())
             get_image_1 = (get_image - get_image.min())/(get_image.max() - get_image.min())
@@ -732,13 +732,13 @@ def concept_grid(model, data_loader, cuda=False, top_k = 6, layout = 'vertical',
             pos = (i,j) if layout == 'horizontal' else (j,i)
 
             l = i*top_k + j
-            print(i,j)
-            print(top_examples[i][j].shape)
+            # print(i,j)
+            # print(top_examples[i][j].shape)
             # plt.imsave('/om2/user/anirbans/CIFAR10/scripts/test/cifar_' + str(i + 1) + '/' + str(j) + '.png', top_examples[i][j])
-            print (top_examples[i][j])
+            # print (top_examples[i][j])
             axes[pos].imshow(top_examples[i][j], cmap='Greys',  interpolation='nearest')
-            plt.imsave('/om2/user/anirbans/CIFAR10/test/cifar_' + str(i + 1) + '/' + str(j) + '.png',
-                       top_examples[i][j])
+            # plt.imsave('/test/cifar_' + str(i + 1) + '/' + str(j) + '.png',
+            #            top_examples[i][j])
             # img = Image.fromarray(top_examples[i][j], 'RGB')
             # img.save('/om2/user/anirbans/CIFAR10/test/cifar_'+ str(i+1)+'/'+str(j)+'.png')
             # save_image(top_examples[i][j], os.path.join('/om2/user/anirbans/CIFAR10/scripts/test/cifar_'+str(i+1), str(j)+'.png'))

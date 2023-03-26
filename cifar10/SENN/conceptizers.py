@@ -335,7 +335,7 @@ class image_resnet_conceptizer(AutoEncoder):
             - Th: Tensor of encoded concepts (b x nconcept x cdim)
     """
 
-    def __init__(self, din, nconcept, nclass, cdim=None, nchannel =1, block=Bottleneck, num_blocks=[3,4,23,3]): #, sparsity = None):
+    def __init__(self, din, nconcept, nclass, cdim=None, nchannel =1, block=BasicBlock, num_blocks=[2,2,2,2]): #, sparsity = None):
         super(image_resnet_conceptizer, self).__init__()
         self.din      = din        # Input dimension
         self.nconcept = nconcept   # Number of "atoms"/concepts
@@ -429,7 +429,8 @@ class image_resnet_conceptizer(AutoEncoder):
         # out = self.avgpool(out)
         out = out.view(out.size(0), -1)
         # print (out.shape)
-        encoded = F.relu(self.conc_linear1(out)).view(-1, self.nconcept, self.cdim)
+        # encoded = F.relu(self.conc_linear1(out)).view(-1, self.nconcept, self.cdim)
+        encoded = self.conc_linear1(out).view(-1, self.nconcept, self.cdim)
         logits = self.conc_linear2(out)
 
         # print (self.din)

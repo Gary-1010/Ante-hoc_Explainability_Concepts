@@ -32,7 +32,7 @@ def get_senn_parser():
     parser = argparse.ArgumentParser(description='Self-Explaining Neural Net Classifier')
 
     ### Overall Setup
-    parser.add_argument('--train', action='store_true', default=False, help='Whether or not to train model')
+    parser.add_argument('--train', action='store_true', default=True, help='Whether or not to train model')
     parser.add_argument('--test', action='store_true', default=False, help='Whether or not to run model on test set')
     parser.add_argument('--load_model', action='store_true', default=True, help='Load pretrained model from default path')
 

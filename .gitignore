@@ -1,0 +1,8 @@
+cifar10/all_concepts
+cifar10/all_logits
+cifar10/all_pen_layers
+cifar10/all_s_logits
+cifar10/samplefile.txt
+
+cifar10/SENN/__pycache__/*
+.idea/

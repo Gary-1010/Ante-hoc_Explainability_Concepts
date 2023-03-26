@@ -76,9 +76,9 @@ def compute_jacobian_sum(x, fx):
 
 def           compute_jacobian(x, fx):
     # Ideas from https://discuss.pytorch.org/t/clarification-using-backward-on-non-scalars/1059/2
-    
-    
-    
+
+
+
     b = x.size(0)
     n = x.size(-1)
     # if fx.dim() > 1:
@@ -128,7 +128,7 @@ def save_checkpoint(state, is_best, outpath):
 class get_default_transforms(nn.Module):
     def __init__(self):
         super().__init__()
-        
+
         self.normalize = transforms.Normalize(mean=[0.5, 0.5, 0.5],
                                               std=[0.5, 0.5, 0.5])
         # self.normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -150,7 +150,7 @@ def gaussian_noise(inputs, mean=0, stddev=0.18):
     noise = np.random.normal(loc=mean, scale=stddev, size=np.shape(input_array))
 
     out = np.clip(np.add(input_array, noise).astype('float32'),0,1)
-   
+
 
     output_tensor = torch.from_numpy(out)
     output_tensor = input_transform(output_tensor)
@@ -200,7 +200,7 @@ def scale(X, x_min, x_max):
 
     denom = X.max(axis=0) - X.min(axis=0)
     denom[denom==0] = 1
-    return x_min + nom/denom 
+    return x_min + nom/denom
 
 class ClassificationTrainer():
     def __init__(self, model, args):
@@ -227,7 +227,7 @@ class ClassificationTrainer():
         if args.h_type != 'input':
             # Means conceptizer will be trained, need reconstruction loss for it
             self.learning_h = True
-            self.h_reconst_criterion = F.mse_loss  #nn.MSELoss() 
+            self.h_reconst_criterion = F.mse_loss  #nn.MSELoss()
             # if args.h_sparsity != -1:
             #     print('Will enforce sparsity on h')
             self.h_sparsity = args.h_sparsity
@@ -286,7 +286,7 @@ class ClassificationTrainer():
                     'state_dict': self.model.state_dict(),
                     'best_prec1': best_prec1,
                     'optimizer' : self.optimizer.state_dict(),
-                    'model': self.model  
+                    'model': self.model
                  }, is_best, save_path)
 
         print('Training done')
@@ -371,7 +371,7 @@ class ClassificationTrainer():
 
             outputs, loss, loss_dict = self.train_batch(inputs, targets)
             loss_dict['iter'] = i + (len(train_loader)*epoch)
-            
+
             # the dict here
             self.loss_history.append(loss_dict)
 
@@ -476,7 +476,7 @@ class ClassificationTrainer():
         test_loss = 0
         correct = 0
         correct_aux=0
-        y = np.zeros(10) 
+        y = np.zeros(10)
         # y=[]
         for i, (data, targets) in enumerate(test_loader, 0):
             # data = gaussian_noise(data)
@@ -770,7 +770,7 @@ class GradPenaltyTrainer(ClassificationTrainer):
         all_losses['auxiliary_prediction'] = aux_loss.item()
         if self.learning_h:
             h_loss = self.concept_learning_loss(inputs, all_losses)
-            loss = pred_loss + 0.0001 * aux_loss # + 0.0001 * h_loss
+            loss = pred_loss + 0.0001 * aux_loss + 0.0001 * h_loss
             # loss = pred_loss
         else:
             loss = pred_loss
@@ -780,7 +780,7 @@ class GradPenaltyTrainer(ClassificationTrainer):
         #update1 = model.weight.grad.data.clone()
 
         # if self.penalty_type == 1:
-            
+
         #     #raise NotImplementedError('Fix this')
         #     #  || df/dx - theta ||)^2
         #     #dTh = self.compute_parametrizer_jacobian(inputs)
@@ -967,7 +967,7 @@ class HLearningClassTrainer(ClassificationTrainer):
     def __init__(self, model, args):
         super().__init__(model, args)
         self.sparsity = args.h_sparsity
-        self.reconst_criterion = nn.MSELoss() 
+        self.reconst_criterion = nn.MSELoss()
 
     def train_batch(self, inputs, targets):
         """ inputs, targets already variables """
@@ -1035,7 +1035,7 @@ class GradPenaltyTrainer_old(ClassificationTrainer):
         return pred, loss
 
     def calc_gradient_penalty(self, net,x,y):
-        
+
         g = torch.autograd.grad(outputs=y.mean(),inputs=x, create_graph=True)[0]
         print(g.size())
         print(net.thetas.size())
@@ -1100,7 +1100,7 @@ class GradPenaltyTrainer3(ClassificationTrainer):
         return pred, loss
 
     def calc_gradient_penalty(self,model,x,y, norm = 1):
-        
+
         # the variables not the data
         thetas = model.thetas #model.parametrizer(x)
         # if True:
